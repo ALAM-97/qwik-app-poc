@@ -1,5 +1,12 @@
-import { component$, Slot } from "@builder.io/qwik";
+import {
+  component$,
+  Slot,
+  useContextProvider,
+  useSignal,
+} from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
+import type { Person } from "~/types";
+import { UserContext } from "~/contexts";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -13,5 +20,17 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 };
 
 export default component$(() => {
-  return <Slot />;
+  const users = useSignal<Array<Person>>([
+    {
+      name: "John",
+      age: 30,
+    },
+  ]);
+
+  useContextProvider(UserContext, users);
+  return (
+    <div class="p-10">
+      <Slot />
+    </div>
+  );
 });

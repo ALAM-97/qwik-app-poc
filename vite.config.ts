@@ -8,6 +8,8 @@ import { qwikCity } from "@builder.io/qwik-city/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import pkg from "./package.json";
 
+import tailwindcss from "@tailwindcss/vite";
+
 type PkgDep = Record<string, string>;
 const { dependencies = {}, devDependencies = {} } = pkg as any as {
   dependencies: PkgDep;
@@ -21,7 +23,7 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies);
  */
 export default defineConfig(({ command, mode }): UserConfig => {
   return {
-    plugins: [qwikCity(), qwikVite(), tsconfigPaths()],
+    plugins: [qwikCity(), qwikVite(), tsconfigPaths(), tailwindcss()],
     // This tells Vite which dependencies to pre-build in dev mode.
     optimizeDeps: {
       // Put problematic deps that break bundling here, mostly those with binaries.
@@ -51,6 +53,27 @@ export default defineConfig(({ command, mode }): UserConfig => {
         // Don't cache the server response in dev mode
         "Cache-Control": "public, max-age=0",
       },
+      proxy: {
+        '/authapi/': {
+          target: 'http://localhost:55209',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/authapi/, ''),
+        },
+        '/userServer/': {  // Proxy per tutte le chiamate a /userServer/api/*
+              // Start of Selection
+              target: 'http://localhost:5258',
+              changeOrigin: true,
+              secure: false,
+              rewrite: (path) => path.replace(/^\/userServer/, ''),
+        },
+        '/process-api/': {
+          target: 'http://localhost:5163',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/process-api/, ''),
+        },
+      },
     },
     preview: {
       headers: {
@@ -60,6 +83,9 @@ export default defineConfig(({ command, mode }): UserConfig => {
     },
   };
 });
+
+
+
 
 // *** utils ***
 
