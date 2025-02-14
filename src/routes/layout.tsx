@@ -29,7 +29,7 @@ export default component$(() => {
 
   useContextProvider(UserContext, users);
   return (
-    <div class="p-10">
+    <div class="">
       <Slot />
     </div>
   );

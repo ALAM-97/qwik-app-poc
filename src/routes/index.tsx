@@ -1,6 +1,7 @@
 import { component$, $, useContext, useSignal } from "@builder.io/qwik";
 import { Link, type DocumentHead, useNavigate } from "@builder.io/qwik-city";
 import { UserContext } from "~/contexts";
+import "../global.css";
 
 export default component$(() => {
   const userData = useSignal<any>(null);
