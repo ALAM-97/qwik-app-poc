@@ -1,14 +1,16 @@
-import { component$, $, useSignal } from '@builder.io/qwik'
+import { component$, $, useContext, useSignal } from '@builder.io/qwik'
 import { useNavigate } from '@builder.io/qwik-city'
-
 import { Button, Input } from '~/components/ui'
+import { SessionContext } from '~/contexts'
 
 export interface UserCredentials {
   email: string | null
   password: string | null
 }
 
-export default component$(() => {
+const Login = component$(() => {
+  const sessionToken = useContext(SessionContext)
+
   const userCredentials = useSignal<UserCredentials>({
     email: '',
     password: '',
@@ -32,9 +34,10 @@ export default component$(() => {
     }
 
     const res = await response.json()
-    console.log(res)
     if (res) {
-      navigate('/')
+      sessionStorage.setItem('authToken', res.token)
+      sessionToken.value = res.token
+      navigate('/dashboard')
     }
   })
 
@@ -57,14 +60,12 @@ export default component$(() => {
           placeholder="Password"
           onChange$={(e) => (userCredentials.value.password = (e.target as HTMLInputElement).value)}
         />
-        <Button
-          type="submit"
-          class="w-full cursor-pointer bg-orange-500 text-white"
-          onClick$={login}
-        >
+        <Button type="submit" class="w-full cursor-pointer bg-blue-500 text-white" onClick$={login}>
           Login
         </Button>
       </div>
     </div>
   )
 })
+
+export default Login

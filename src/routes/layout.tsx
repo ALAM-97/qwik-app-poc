@@ -1,12 +1,8 @@
-import {
-  component$,
-  Slot,
-  useContextProvider,
-  useSignal,
-} from "@builder.io/qwik";
-import type { RequestHandler } from "@builder.io/qwik-city";
-import type { Person } from "~/types";
-import { UserContext } from "~/contexts";
+import { component$, Slot, useContextProvider, useSignal } from '@builder.io/qwik'
+import type { RequestHandler } from '@builder.io/qwik-city'
+import type { Person } from '~/types'
+import { SessionContext, UserContext } from '~/contexts'
+import '../global.css'
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -16,21 +12,19 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
     staleWhileRevalidate: 60 * 60 * 24 * 7,
     // Max once every 5 seconds, revalidate on the server to get a fresh version of this page
     maxAge: 5,
-  });
-};
+  })
+}
 
 export default component$(() => {
-  const users = useSignal<Array<Person>>([
-    {
-      name: "John",
-      age: 30,
-    },
-  ]);
+  const sessionToken = useSignal<string | null>(null)
 
-  useContextProvider(UserContext, users);
+  const users = useSignal<Array<Person>>([])
+
+  useContextProvider(UserContext, users)
+  useContextProvider(SessionContext, sessionToken)
   return (
     <div class="">
       <Slot />
     </div>
-  );
-});
+  )
+})
