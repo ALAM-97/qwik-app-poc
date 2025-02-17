@@ -1,7 +1,7 @@
 import { component$, $, useContext, useSignal } from '@builder.io/qwik'
 import { useNavigate } from '@builder.io/qwik-city'
 import { postLogInPassword } from '~/actions/auth'
-import Loader from '~/components/loeader'
+import Loader from '~/components/loader'
 import { Button, Input } from '~/components/ui'
 import { SessionContext } from '~/contexts'
 
@@ -11,32 +11,32 @@ export interface UserCredentials {
 }
 
 const Login = component$(() => {
-  const sessionToken = useContext(SessionContext)
+  const session = useContext(SessionContext)
+  const loading = useSignal(false)
+  const navigate = useNavigate()
 
   const userCredentials = useSignal<UserCredentials>({
-    email: '',
-    password: '',
+    email: 'alexamara97@gmail.com',
+    password: 'Alevalefra1',
   })
-
-  const loading = useSignal(false)
-
-  const navigate = useNavigate()
 
   const handleLogin = $(async () => {
     loading.value = true
     const response = await postLogInPassword(userCredentials.value)
 
-    if (!response) {
+    if (response.status && response.status !== 200) {
+      // TODO: ERROR MESSAGE
       console.error('Errore nella richiesta:', response)
       loading.value = false
       return
     }
 
-    const res = response
-
-    if (res) {
-      sessionStorage.setItem('authToken', res.token)
-      sessionToken.value = res.token
+    if (response) {
+      session.user.firstName = response.firstName
+      session.user.lastName = response.lastName
+      session.user.email = response.email
+      session.token = response.token
+      sessionStorage.setItem('session', JSON.stringify(session))
       navigate('/dashboard')
     }
   })
@@ -51,6 +51,7 @@ const Login = component$(() => {
             name="email"
             placeholder="Email"
             class="mb-5"
+            value={'alexamara97@gmail.com'}
             onChange$={(e) => (userCredentials.value.email = (e.target as HTMLInputElement).value)}
           />
           <Input
@@ -59,6 +60,7 @@ const Login = component$(() => {
             type="password"
             name="password"
             placeholder="Password"
+            value={'Alevalefra1'}
             onChange$={(e) =>
               (userCredentials.value.password = (e.target as HTMLInputElement).value)
             }

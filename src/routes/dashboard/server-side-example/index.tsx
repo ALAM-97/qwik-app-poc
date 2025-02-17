@@ -15,7 +15,7 @@ const Index = component$(() => {
 
   return (
     <>
-      <h1 class="text-3xl font-bold underline hover:text-red-500">Server side example page</h1>
+      <h1 class="mb-5 text-3xl font-bold underline">Investments</h1>
 
       <div>
         <button
@@ -26,7 +26,6 @@ const Index = component$(() => {
         </button>
 
         <div>
-          {/* <p class="w-1/2 bg-red-300">client Investments: {JSON.stringify(investments.value)}</p> */}
           <div>server Investments:</div>
           <ul>
             {investmentsSignal.value.map((investment: any) => (

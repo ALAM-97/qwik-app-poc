@@ -1,5 +1,6 @@
-import { component$, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik'
+import { component$, Slot, useContext, useTask$, useVisibleTask$ } from '@builder.io/qwik'
 import type { RequestHandler } from '@builder.io/qwik-city'
+import Navbar from '~/components/navbar'
 import Unauthorized from '~/components/unauthorized'
 import { SessionContext } from '~/contexts'
 
@@ -15,25 +16,34 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 }
 
 export default component$(() => {
-  const sessionToken = useContext(SessionContext)
+  const session = useContext(SessionContext)
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     if (typeof window !== 'undefined') {
-      const token = sessionStorage.getItem('authToken')
+      const storedSession = sessionStorage.getItem('session')
+      const parsedSession = storedSession && JSON.parse(storedSession)
 
-      if (token) {
-        sessionToken.value = token
+      if (parsedSession) {
+        session.token = parsedSession.token
+        session.user.firstName = parsedSession.user.firstName
+        session.user.lastName = parsedSession.user.lastName
+        session.user.email = parsedSession.user.email
       }
     }
 
-    track(() => sessionToken.value)
+    track(() => session)
   })
 
   return (
     <>
-      {sessionToken.value ? (
-        <Slot />
+      {session.token ? (
+        <>
+          <Navbar />
+          <div class="p-10">
+            <Slot />
+          </div>
+        </>
       ) : (
         <div class="flex min-h-screen items-center justify-center">
           <Unauthorized />

@@ -1,7 +1,7 @@
-import { component$, Slot, useContextProvider, useSignal } from '@builder.io/qwik'
+import { component$, Slot, useContextProvider, useStore, useTask$ } from '@builder.io/qwik'
 import type { RequestHandler } from '@builder.io/qwik-city'
-import type { Person } from '~/types'
-import { SessionContext, UserContext } from '~/contexts'
+import type { LoggedUser } from '~/types'
+import { SessionContext } from '~/contexts'
 import '../global.css'
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
@@ -16,12 +16,16 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 }
 
 export default component$(() => {
-  const sessionToken = useSignal<string | null>(null)
+  const session = useStore<LoggedUser>({
+    token: '',
+    user: {
+      firstName: '',
+      lastName: '',
+      email: '',
+    },
+  })
 
-  const users = useSignal<Array<Person>>([])
-
-  useContextProvider(UserContext, users)
-  useContextProvider(SessionContext, sessionToken)
+  useContextProvider(SessionContext, session)
   return (
     <div class="">
       <Slot />

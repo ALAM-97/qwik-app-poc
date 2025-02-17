@@ -1,10 +1,10 @@
-import { component$, useStore, useContext, useResource$, Resource } from '@builder.io/qwik'
+import { component$, useContext, useResource$, Resource } from '@builder.io/qwik'
 import { fetchUsers } from '~/actions/auth'
-import Loader from '~/components/loeader'
+import Loader from '~/components/loader'
 import { SessionContext } from '~/contexts'
 
 const Users = component$(() => {
-  const sessionToken = useContext(SessionContext)
+  const session = useContext(SessionContext)
 
   // const usersData = useStore<{ users: any[] }>({
   //   users: [],
@@ -28,16 +28,17 @@ const Users = component$(() => {
   // })
 
   const usersData = useResource$<any[]>(({ track }) => {
-    track(() => sessionToken.value)
-    if (sessionToken.value) {
-      return fetchUsers(sessionToken.value)
+    track(() => session.token)
+    if (session.token) {
+      return fetchUsers(session.token)
     }
     return []
   })
 
   return (
     <>
-      <h1 class="mb-5 text-2xl font-bold">Users</h1>
+      <h1 class="mb-5 text-3xl font-bold underline">Users</h1>
+
       <Resource
         value={usersData}
         onPending={() => <Loader />}
