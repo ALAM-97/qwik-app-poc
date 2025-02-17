@@ -1,11 +1,11 @@
+import { GET, POST } from '..'
+
+export async function postLogInPassword(userCredentials: any) {
+  const response = await POST('authapi/api/IdentityUsers/PostLogInPassword', userCredentials)
+  return await response
+}
+
 export async function fetchUsers(sessionToken: string) {
-  const response = await fetch(`http://localhost:5173/authapi/api/Users/fetchUsers`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${sessionToken}`,
-    },
-  })
-  const data = await response.json()
-  return data
+  const response = await GET('authapi/api/Users/fetchUsers', {}, sessionToken)
+  return await response
 }
