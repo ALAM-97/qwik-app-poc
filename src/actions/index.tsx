@@ -2,57 +2,57 @@
 // import { authOptions } from '../lib/auth'
 
 export async function GET(url = '', queryParams = {}, sessionToken: string) {
-  try {
-    // const session = await getServerSession(authOptions)
+   try {
+      // const session = await getServerSession(authOptions)
 
-    const headers: HeadersInit = {}
+      const headers: HeadersInit = {}
 
-    if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`
-    headers.Clientid = 'yeldo-test'
+      if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`
+      headers.Clientid = 'yeldo-test'
 
-    const params = new URLSearchParams(queryParams)
+      const params = new URLSearchParams(queryParams)
 
-    const response = await fetch(`${import.meta.env.PUBLIC_BASE_URL}/` + url + '?' + params, {
-      method: 'GET',
-      headers,
-    })
+      const response = await fetch(`${import.meta.env.PUBLIC_BASE_URL}/` + url + '?' + params, {
+         method: 'GET',
+         headers,
+      })
 
-    return await response.json()
-  } catch (e) {
-    console.error(e)
-  }
+      return await response.json()
+   } catch (e) {
+      console.error(e)
+   }
 }
 
 export async function POST(
-  url = '',
-  body = {},
-  sessionToken: string | null = null,
-  includeFile = false,
-  receiveJson = true
+   url = '',
+   body = {},
+   sessionToken: string | null = null,
+   includeFile = false,
+   receiveJson = true
 ) {
-  try {
-    // const session = await getServerSession(authOptions)
-    // Default options are marked with *
-    const headers: HeadersInit = {}
-    if (!includeFile) headers['Content-Type'] = 'application/json'
-    if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`
-    headers.Clientid = 'yeldo-test'
+   try {
+      // const session = await getServerSession(authOptions)
+      // Default options are marked with *
+      const headers: HeadersInit = {}
+      if (!includeFile) headers['Content-Type'] = 'application/json'
+      if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`
+      headers.Clientid = 'yeldo-test'
 
-    const response = await fetch(`${import.meta.env.PUBLIC_BASE_URL}/` + url, {
-      method: 'POST',
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers,
-      redirect: 'follow', // manual, *follow, erro
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      const response = await fetch(`${import.meta.env.PUBLIC_BASE_URL}/` + url, {
+         method: 'POST',
+         mode: 'cors', // no-cors, *cors, same-origin
+         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+         credentials: 'same-origin', // include, *same-origin, omit
+         headers,
+         redirect: 'follow', // manual, *follow, erro
+         referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 
-      body: JSON.stringify(body), // body data type must match "Content-Type" header
-    })
-    return receiveJson ? await response.json() : response // parses JSON response into native JavaScript objects
-  } catch (e) {
-    console.error(e)
-  }
+         body: JSON.stringify(body), // body data type must match "Content-Type" header
+      })
+      return receiveJson ? await response.json() : response // parses JSON response into native JavaScript objects
+   } catch (e) {
+      console.error(e)
+   }
 }
 
 // http://localhost:5173/authapi/api/Users/fetchUsers?
