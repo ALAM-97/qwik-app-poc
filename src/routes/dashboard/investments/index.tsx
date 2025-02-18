@@ -4,6 +4,17 @@ import Loader from '~/components/loader'
 import { getInvestments } from '~/actions/investment'
 import { SessionContext } from '~/contexts'
 
+import {
+   TableHeader,
+   Table,
+   TableHead,
+   TableBody,
+   TableRow,
+   TableCell,
+   TableCaption,
+   TableFooter,
+} from '~/components/ui/table'
+
 export const head: DocumentHead = {
    title: 'Yeldo | Investments',
    meta: [
@@ -38,9 +49,30 @@ const Investments = component$(() => {
             value={investmentData}
             onPending={() => <Loader />}
             onResolved={(investments) => {
-               return investments.map((investment: any) => (
-                  <div key={investment.id}>{investment.id}</div>
-               ))
+               return (
+                  <Table class="rounded-lg bg-gray-100">
+                     <TableHeader>
+                        <TableRow>
+                           <TableHead>ID</TableHead>
+                           <TableHead>Subscriber</TableHead>
+                           <TableHead>Amount</TableHead>
+                           <TableHead>Currency</TableHead>
+                           <TableHead>Status</TableHead>
+                        </TableRow>
+                     </TableHeader>
+                     <TableBody>
+                        {investments.map((investment) => (
+                           <TableRow key={investment.id}>
+                              <TableCell>{investment.id}</TableCell>
+                              <TableCell>{investment.subscriber.name}</TableCell>
+                              <TableCell>{investment.amount}</TableCell>
+                              <TableCell>{investment.project.currency}</TableCell>
+                              <TableCell>{investment.status}</TableCell>
+                           </TableRow>
+                        ))}
+                     </TableBody>
+                  </Table>
+               )
             }}
          />
       </>
