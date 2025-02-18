@@ -21,7 +21,7 @@ export default component$(() => {
    // eslint-disable-next-line qwik/no-use-visible-task
    useVisibleTask$(({ track }) => {
       if (typeof window !== 'undefined') {
-         const storedSession = sessionStorage.getItem('session')
+         const storedSession = localStorage.getItem('session')
          const parsedSession = storedSession && JSON.parse(storedSession)
 
          if (parsedSession) {

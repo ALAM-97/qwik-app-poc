@@ -36,7 +36,7 @@ const Login = component$(() => {
          session.user.lastName = response.lastName
          session.user.email = response.email
          session.token = response.token
-         sessionStorage.setItem('session', JSON.stringify(session))
+         localStorage.setItem('session', JSON.stringify(session))
          navigate('/dashboard')
       }
    })

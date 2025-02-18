@@ -17,27 +17,6 @@ export const head: DocumentHead = {
 const Users = component$(() => {
    const session = useContext(SessionContext)
 
-   // const usersData = useStore<{ users: any[] }>({
-   //   users: [],
-   // })
-
-   // useTask$(async ({ track }) => {
-   //   if (sessionToken.value) {
-   //     const response = await fetchUsers(sessionToken.value)
-   //     usersData.users = response
-   //   }
-   //   track(() => sessionToken.value)
-   // })
-
-   // eslint-disable-next-line qwik/no-use-visible-task
-   // useVisibleTask$(async ({ track }) => {
-   //   if (sessionToken.value) {
-   //     const response = await fetchUsers(sessionToken.value)
-   //     usersData.users = response
-   //   }
-   //   track(() => sessionToken.value)
-   // })
-
    const usersData = useResource$<any[]>(({ track }) => {
       track(() => session.token)
 
