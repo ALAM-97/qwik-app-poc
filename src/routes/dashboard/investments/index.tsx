@@ -24,13 +24,7 @@ export const head: DocumentHead = {
 const Investments = component$(() => {
    // const session = useContext(SessionContext)
    const investmentData = useResource$<any[]>(async () => {
-      const res = await getInvestments({ take: 30 })
-
-      if (res) {
-         return res
-      }
-
-      return []
+      return await getInvestments({ take: 30 })
    })
 
    return (

@@ -22,8 +22,8 @@ export const head: DocumentHead = {
 }
 
 const Users = component$(() => {
-   const usersData = useResource$<any[]>(() => {
-      return fetchUsers()
+   const usersData = useResource$<any[]>(async () => {
+      return await fetchUsers()
    })
 
    return (
