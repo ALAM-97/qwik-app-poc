@@ -1,4 +1,4 @@
-import { component$, Resource, useResource$ } from '@builder.io/qwik'
+import { component$, Resource, useResource$, useVisibleTask$ } from '@builder.io/qwik'
 import { type DocumentHead } from '@builder.io/qwik-city'
 import Loader from '~/components/loader'
 import { getInvestments } from '~/actions/investment'
@@ -32,10 +32,6 @@ const Investments = component$(() => {
 
       return []
    })
-
-   if (!investmentData) {
-      return <Loader />
-   }
 
    return (
       <>
