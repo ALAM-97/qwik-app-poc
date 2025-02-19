@@ -7,6 +7,6 @@ type getInvestmentsQueryParams = {
    filter?: string
 }
 
-export async function getInvestments(queryParams: getInvestmentsQueryParams, sessionToken: string) {
-   return await GET('process-api/api/admin/getInvestments', queryParams, sessionToken)
+export async function getInvestments(queryParams: getInvestmentsQueryParams) {
+   return await GET('process-api/api/admin/getInvestments', queryParams)
 }

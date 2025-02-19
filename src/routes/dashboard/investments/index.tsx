@@ -1,9 +1,7 @@
-import { component$, Resource, useContext, useResource$ } from '@builder.io/qwik'
+import { component$, Resource, useResource$ } from '@builder.io/qwik'
 import { type DocumentHead } from '@builder.io/qwik-city'
 import Loader from '~/components/loader'
 import { getInvestments } from '~/actions/investment'
-import { SessionContext } from '~/contexts'
-
 import {
    TableHeader,
    Table,
@@ -11,8 +9,6 @@ import {
    TableBody,
    TableRow,
    TableCell,
-   TableCaption,
-   TableFooter,
 } from '~/components/ui/table'
 
 export const head: DocumentHead = {
@@ -25,21 +21,21 @@ export const head: DocumentHead = {
    ],
 }
 
-// export const useGetInvestments = routeLoader$(async () => {
-//    const response = await fetch('http://localhost:5173/process-api/api/admin/getInvestments', {
-//       headers: { Accept: 'application/json' },
-//    })
-//    return await response.json()
-// })
-
 const Investments = component$(() => {
-   const session = useContext(SessionContext)
+   // const session = useContext(SessionContext)
+   const investmentData = useResource$<any[]>(async () => {
+      const res = await getInvestments({ take: 30 })
 
-   const investmentData = useResource$<any[]>(({ track }) => {
-      track(() => session.token)
+      if (res) {
+         return res
+      }
 
-      return getInvestments({ take: 30 }, session.token)
+      return []
    })
+
+   if (!investmentData) {
+      return <Loader />
+   }
 
    return (
       <>
@@ -48,6 +44,10 @@ const Investments = component$(() => {
          <Resource
             value={investmentData}
             onPending={() => <Loader />}
+            onRejected={(error) => {
+               console.error('Error fetching investments:', error)
+               return <div>Error loading investments</div>
+            }}
             onResolved={(investments) => {
                return (
                   <Table class="rounded-lg bg-gray-100">

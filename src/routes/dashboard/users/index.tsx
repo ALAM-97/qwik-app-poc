@@ -1,4 +1,4 @@
-import { component$, useContext, useResource$, Resource } from '@builder.io/qwik'
+import { component$, useResource$, Resource } from '@builder.io/qwik'
 import type { DocumentHead } from '@builder.io/qwik-city'
 import { fetchUsers } from '~/actions/auth'
 import Loader from '~/components/loader'
@@ -10,7 +10,6 @@ import {
    TableHeader,
    TableRow,
 } from '~/components/ui/table'
-import { SessionContext } from '~/contexts'
 
 export const head: DocumentHead = {
    title: 'Yeldo | Users',
@@ -23,12 +22,8 @@ export const head: DocumentHead = {
 }
 
 const Users = component$(() => {
-   const session = useContext(SessionContext)
-
-   const usersData = useResource$<any[]>(({ track }) => {
-      track(() => session.token)
-
-      return fetchUsers(session.token)
+   const usersData = useResource$<any[]>(() => {
+      return fetchUsers()
    })
 
    return (
@@ -38,6 +33,10 @@ const Users = component$(() => {
          <Resource
             value={usersData}
             onPending={() => <Loader />}
+            onRejected={(error) => {
+               console.error('Error fetching users:', error)
+               return <div>Error loading users</div>
+            }}
             onResolved={(users) => {
                return (
                   <Table class="rounded-lg bg-gray-100">

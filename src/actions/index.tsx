@@ -1,14 +1,13 @@
 // import { getServerSession } from 'next-auth'
 // import { authOptions } from '../lib/auth'
 
-export async function GET(url = '', queryParams = {}, sessionToken: string) {
+export async function GET(url = '', queryParams = {}) {
    try {
-      // const session = await getServerSession(authOptions)
-
-      const headers: HeadersInit = {}
-
-      if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`
-      headers.Clientid = 'yeldo-test'
+      // Start of Selection
+      const headers: HeadersInit = {
+         Clientid: 'yeldo-test',
+         // The Authorization header is already set by the middleware
+      }
 
       const params = new URLSearchParams(queryParams)
 
@@ -33,10 +32,12 @@ export async function POST(
    try {
       // const session = await getServerSession(authOptions)
       // Default options are marked with *
-      const headers: HeadersInit = {}
+      const headers: HeadersInit = {
+         Clientid: 'yeldo-test',
+         // The Authorization header is already set by the middleware
+      }
       if (!includeFile) headers['Content-Type'] = 'application/json'
       if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`
-      headers.Clientid = 'yeldo-test'
 
       const response = await fetch(`${import.meta.env.PUBLIC_BASE_URL}/` + url, {
          method: 'POST',
