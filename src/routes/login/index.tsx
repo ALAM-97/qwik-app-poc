@@ -24,7 +24,7 @@ const Login = component$(() => {
       loading.value = true
       const response = await postLogInPassword(userCredentials.value)
 
-      if (response.status && response.status !== 200) {
+      if (!response) {
          // TODO: ERROR MESSAGE
          console.error('Errore nella richiesta:', response)
          loading.value = false
@@ -32,10 +32,11 @@ const Login = component$(() => {
       }
 
       if (response) {
+         // Start of Selection
          session.user.firstName = response.firstName
          session.user.lastName = response.lastName
          session.user.email = response.email
-         session.token = response.token
+         document.cookie = `AccessToken=${response.token}; path=/; secure`
          localStorage.setItem('session', JSON.stringify(session))
          navigate('/dashboard')
       }

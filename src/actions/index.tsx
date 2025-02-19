@@ -3,16 +3,27 @@
 
 export async function GET(url = '', queryParams = {}) {
    try {
-      // Start of Selection
+      console.log('TRE')
+
       const headers: HeadersInit = {
          Clientid: 'yeldo-test',
-         // The Authorization header is already set by the middleware
+      }
+
+      // Recupero il token dai cookie
+      const token = document.cookie
+         .split('; ')
+         .find((row) => row.startsWith('AccessToken='))
+         ?.split('=')[1]
+
+      if (token) {
+         headers.Authorization = `Bearer ${token}`
       }
 
       const params = new URLSearchParams(queryParams)
 
       const response = await fetch(`${import.meta.env.PUBLIC_BASE_URL}/` + url + '?' + params, {
          method: 'GET',
+
          headers,
       })
 
@@ -38,6 +49,15 @@ export async function POST(
       }
       if (!includeFile) headers['Content-Type'] = 'application/json'
       if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`
+
+      const token = document.cookie
+         .split('; ')
+         .find((row) => row.startsWith('AccessToken='))
+         ?.split('=')[1]
+
+      if (token) {
+         headers.Authorization = `Bearer ${token}`
+      }
 
       const response = await fetch(`${import.meta.env.PUBLIC_BASE_URL}/` + url, {
          method: 'POST',

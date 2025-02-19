@@ -1,0 +1,8 @@
+export { DialogClose } from './dialog-close'
+export { DialogContent } from './dialog-content'
+export { DialogDescription } from './dialog-description'
+export { DialogFooter } from './dialog-footer'
+export { DialogHeader } from './dialog-header'
+export { DialogRoot } from './dialog-root'
+export { DialogTitle } from './dialog-title'
+export { DialogTrigger } from './dialog-trigger'

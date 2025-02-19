@@ -1,5 +1,5 @@
-import { component$, Resource, useResource$, useVisibleTask$ } from '@builder.io/qwik'
-import { type DocumentHead } from '@builder.io/qwik-city'
+import { component$, Resource, useResource$ } from '@builder.io/qwik'
+import { Link, type DocumentHead } from '@builder.io/qwik-city'
 import Loader from '~/components/loader'
 import { getInvestments } from '~/actions/investment'
 import {
@@ -10,6 +10,24 @@ import {
    TableRow,
    TableCell,
 } from '~/components/ui/table'
+import {
+   DropdownMenuItem,
+   DropdownMenuPopover,
+   DropdownMenuRoot,
+   DropdownMenuSeparator,
+   DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu'
+import {
+   DialogRoot,
+   DialogTrigger,
+   DialogContent,
+   DialogTitle,
+   DialogHeader,
+   DialogDescription,
+   DialogFooter,
+   DialogClose,
+} from '~/components/ui/dialog'
+import { Button } from '~/components/ui/button/button'
 
 export const head: DocumentHead = {
    title: 'Yeldo | Investments',
@@ -58,6 +76,26 @@ const Investments = component$(() => {
                               <TableCell>{investment.amount}</TableCell>
                               <TableCell>{investment.project.currency}</TableCell>
                               <TableCell>{investment.status}</TableCell>
+                              <TableCell>
+                                 <DropdownMenuRoot>
+                                    <DropdownMenuTrigger>
+                                       <div class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md bg-purple-200">
+                                          <span class="material-symbols-outlined">more_vert</span>
+                                       </div>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuPopover>
+                                       <DropdownMenuItem>
+                                          <Link
+                                             href={`/dashboard/investments/${investment.project.id}/${investment.id}/edit`}
+                                          >
+                                             Edit
+                                          </Link>
+                                       </DropdownMenuItem>
+                                       <DropdownMenuSeparator class="mx-2 my-1 bg-neutral-400" />
+                                       <DropdownMenuItem>Delete</DropdownMenuItem>
+                                    </DropdownMenuPopover>
+                                 </DropdownMenuRoot>
+                              </TableCell>
                            </TableRow>
                         ))}
                      </TableBody>

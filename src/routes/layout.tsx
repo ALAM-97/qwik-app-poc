@@ -1,19 +1,21 @@
 import { component$, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik'
-import type { RequestHandler } from '@builder.io/qwik-city'
+// import type { RequestHandler } from '@builder.io/qwik-city'
 import type { LoggedUser } from '~/types'
 import { SessionContext } from '~/contexts'
 import '../global.css'
 
-export const onGet: RequestHandler = async ({ cacheControl }) => {
-   // Control caching for this request for best performance and to reduce hosting costs:
-   // https://qwik.dev/docs/caching/
-   cacheControl({
-      // Always serve a cached response by default, up to a week stale
-      staleWhileRevalidate: 60 * 60 * 24 * 7,
-      // Max once every 5 seconds, revalidate on the server to get a fresh version of this page
-      maxAge: 5,
-   })
-}
+// export const onRequest: RequestHandler = async ({ request, next, cookie }) => {
+//    // Recupera il token dal cookie
+//    const token = cookie.get('AccessToken')?.value
+
+//    if (token) {
+//       // Aggiungi l'header Authorization alla richiesta
+//       request.headers.set('Authorization', `Bearer ${token}`)
+//    }
+
+//    // Passa al prossimo middleware o gestore
+//    await next()
+// }
 
 export default component$(() => {
    const session = useStore<LoggedUser>({
@@ -29,7 +31,6 @@ export default component$(() => {
    useVisibleTask$(({ track }) => {
       if (typeof window !== 'undefined') {
          const storedSession = localStorage.getItem('session')
-         console.log('storedSession login', storedSession)
 
          const parsedSession = storedSession && JSON.parse(storedSession)
 
